@@ -124,3 +124,6 @@ client/coverage
 
 # production
 client/build
+
+clinet/dist/main.js
+clinet/dist/main.js.map
