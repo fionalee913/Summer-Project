@@ -4,6 +4,12 @@ module.exports = {
   devtool: "source-map",
   devServer: {
          contentBase: './dist',
+         allowedHosts: [
+          '0.0.0.0',
+        ],
+        proxy: {
+          '/api': 'http://localhost:3000'
+        }
   },
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
