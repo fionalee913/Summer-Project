@@ -15,12 +15,13 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react",
     "outDir": "./dist/",
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "esnext"
+    "module": "esnext",
+    "noImplicitThis": true,
+    "strictNullChecks": true,
   },
   "include": [
     "src"
