@@ -1,16 +1,19 @@
 module.exports = {
-  mode: "production",
 
   // Enable sourcemaps for debugging webpack's output.
   devtool: "source-map",
-
+  devServer: {
+         contentBase: './dist',
+  },
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: [".ts", ".tsx", ".jsx", ".js"]
   },
 
   module: {
+
     rules: [
+
       {
         test: /\.ts(x?)$/,
         exclude: /node_modules/,
@@ -48,5 +51,5 @@ module.exports = {
   externals: {
       "react": "React",
       "react-dom": "ReactDOM"
-  }
+  },
 };

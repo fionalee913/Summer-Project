@@ -2,13 +2,13 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Button from '@material-ui/core/Button';
-// import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox';
 
 function App() {
-  // const [checked, setChecked] = React.useState(true);
-  // const handleChange = (event: { target: HTMLInputElement; }) => {
-  //   setChecked(event.target.checked);
-  // };
+  const [checked, setChecked] = React.useState(true);
+  const handleChange = (event: { target: HTMLInputElement; }) => {
+    setChecked(event.target.checked);
+  };
   return (
     <div className="App">
       <header className="App-header">
@@ -29,11 +29,11 @@ function App() {
       <Button variant="contained" color="primary">
         Primary
 </Button>
-      {/* <Checkbox
+      <Checkbox
         checked={checked}
         onChange={handleChange}
         inputProps={{ 'aria-label': 'primary checkbox' }}
-      /> */}
+      />
     </div>
   );
 }

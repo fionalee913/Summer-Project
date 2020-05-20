@@ -12,6 +12,7 @@
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "css-loader": "^3.5.3",
+    "eslint": "3.2.2",
     "file-loader": "^6.0.0",
     "install": "^0.13.0",
     "npm": "^6.14.5",
@@ -22,13 +23,13 @@
     "source-map-loader": "^0.2.4",
     "style-loader": "^1.2.1",
     "ts-loader": "^7.0.4",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.3",
+    "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "webpack-dev-server": "webpack-dev-server",
+    "dev": "webpack-dev-server --mode=development",
+    "prod": "webpack --mode=production"
   },
   "eslintConfig": {
     "extends": "react-app"
