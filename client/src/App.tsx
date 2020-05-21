@@ -26,7 +26,7 @@ function App() {
         </a>
       </header>
       <p>Hello World</p>
-      <Button variant="contained" color="primary">
+      <Button variant="contained" color="secondary">
         Primary
 </Button>
       <Checkbox
