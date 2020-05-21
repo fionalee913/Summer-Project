@@ -29,7 +29,7 @@
   "scripts": {
     "webpack-dev-server": "webpack-dev-server",
     "dev": "webpack-dev-server --mode=development",
-    "prod": "webpack --mode=production"
+    "prod": "webpack --mode=production && rm -rf ../server/public && cp -r dist ../server/public"
   },
   "eslintConfig": {
     "extends": "react-app"
