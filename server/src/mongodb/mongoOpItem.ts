@@ -6,12 +6,12 @@ export default class MangoOpItem {
             resolve();
         });
     }
-    public static deleteFromDB(id: number) {
+    public static deleteFromDB(id: string) {
         return new Promise((resolve, reject) => {
             resolve();
         });
     }
-    public static getFromDB(id: number) {
+    public static getFromDB(id: string) {
         return new Promise((resolve, reject) => {
             resolve();
         });

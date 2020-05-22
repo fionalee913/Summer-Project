@@ -15,6 +15,7 @@
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
+    "mongoose": "^5.9.15",
     "tslint": "^5.12.1",
     "typescript": "^3.3.3"
   }

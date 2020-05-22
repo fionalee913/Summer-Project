@@ -16,7 +16,7 @@ router.post("/delete", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
-    Item.getFromDB(Number(req.params.id))
+    Item.getFromDB(String(req.params.id))
         .then((data) => res.status(200).json(data))
         .catch(() => res.status(500).send());
 });

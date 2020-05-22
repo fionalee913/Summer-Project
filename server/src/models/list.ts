@@ -1,18 +1,31 @@
-import MangoOpList from "../mangodbOp/mangoOpList";
+import { listenerCount } from "cluster";
+import MangoOpList from "../mongodb/mongoOpList";
 import Item from "./item";
 
 export default class List extends MangoOpList {
-    private title: string;
-    private item: Item[];
+    public static parse(data: {title: string, id: string, items: []}): List {
+        const list: List = new List(data.title);
+        list.id = data.id;
+        data.items.forEach((item) => {
+            list.addItem(
+                Item.parse(item),
+            );
+        });
+        return list;
+    }
+    public title: string;
+    public items: Item[];
+    public id: string | null;
     constructor(title: string) {
         super();
         this.title = title;
-        this.item = [];
+        this.items = [];
+        this.id = null;
     }
-    public addItem(i: Item) {
-        this.item.push(i);
+    private addItem(i: Item) {
+        this.items.push(i);
     }
-    public removeItem(i: Item) {
+    private removeItem(i: Item) {
         return;
     }
 }
