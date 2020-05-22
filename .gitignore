@@ -129,5 +129,6 @@ clinet/dist/main.js
 clinet/dist/main.js.map
 
 server/node_modules
-server/dist/main.js
-server/dist/main.js.map
+server/public/main.js
+server/public/main.js.map
+server/.env
