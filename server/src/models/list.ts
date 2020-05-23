@@ -1,12 +1,11 @@
-import { listenerCount } from "cluster";
-import MangoOpList from "../mongodb/mongoOpList";
 import Item from "./item";
 
-export default class List extends MangoOpList {
-    public static parse(data: {title: string, id: string, items: []}): List {
+export default class List {
+    public static parse(data: {title: string, id: string, items: Map<string, any>}): List {
         const list: List = new List(data.title);
         list.id = data.id;
-        data.items.forEach((item) => {
+        const items = Object.values(data.items).sort((a, b) => a.timestamp > b.timestamp ? 1 : -1);
+        items.forEach((item) => {
             list.addItem(
                 Item.parse(item),
             );
@@ -17,7 +16,6 @@ export default class List extends MangoOpList {
     public items: Item[];
     public id: string | null;
     constructor(title: string) {
-        super();
         this.title = title;
         this.items = [];
         this.id = null;

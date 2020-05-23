@@ -1,22 +1,29 @@
 import express from "express";
 import Item from "../models/item";
+import MangoOpItem from "../mongodb/mongoOpItem";
 const router = express.Router();
 
-router.post("/add", (req, res) => {
+router.post("/add/", (req, res) => {
     const item = new Item(req.body.title, req.body.listID);
-    Item.insertToDB(item)
+    MangoOpItem.insertToDB(item)
         .then((id) => res.status(200).json({id}))
         .catch(() => res.status(500).send());
 });
 
-router.post("/delete", (req, res) => {
-    Item.deleteFromDB(req.body.id)
-        .then((id) => res.status(200).json({id}))
+router.post("/delete/", (req, res) => {
+    MangoOpItem.deleteFromDB(req.body.listID, req.body.id)
+        .then(() => res.status(200).send())
         .catch(() => res.status(500).send());
 });
 
-router.get("/:id", (req, res) => {
-    Item.getFromDB(String(req.params.id))
+router.post("/update/", (req, res) => {
+    MangoOpItem.updateFromDB(req.body.listID, req.body.id, req.body.payload)
+        .then(() => res.status(200).send())
+        .catch(() => res.status(500).send());
+});
+
+router.get("/:listID/:id/", (req, res) => {
+    MangoOpItem.getFromDB(req.params.listID, req.params.id)
         .then((data) => res.status(200).json(data))
         .catch(() => res.status(500).send());
 });
