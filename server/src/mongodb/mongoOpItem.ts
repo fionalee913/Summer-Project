@@ -1,8 +1,14 @@
-import { ObjectId, Types } from "mongoose";
+import { Types } from "mongoose";
 import Item from "../models/item";
 import { ListModel } from "./mongoOpList";
 
-export default class MangoOpItem {
+// interface IItemSchema extends Document {
+//     isCompleted: boolean;
+//     timestamp: number;
+//     title: string;
+// }
+
+export class MangoOpItem {
     public static insertToDB(item: Item) {
         return new Promise((resolve, reject) => {
             ListModel.findById(item.listID, (err, data) => {
@@ -12,13 +18,16 @@ export default class MangoOpItem {
                     if (!data) {
                         reject("List not found!");
                     } else {
-                        item.id = new Types.ObjectId();
-                        data.items[item.id] = item;
+                        const itemID = new Types.ObjectId();
+                        data.items.push({
+                            ...item,
+                            _id:  itemID,
+                        });
                         data.save((listErr) => {
                             if (listErr) {
                                 reject("List saving error");
                             } else {
-                                resolve(item.id);
+                                resolve(itemID);
                             }
                         });
                     }
@@ -35,7 +44,7 @@ export default class MangoOpItem {
                     if (!data) {
                         reject("List not found!");
                     } else {
-                        delete data.items[id];
+                        data.items.id(id).remove();
                         data.save((listErr) => {
                             if (listErr) {
                                 reject("List saving error");
@@ -57,8 +66,9 @@ export default class MangoOpItem {
                     if (!data) {
                         reject("List not found!");
                     } else {
+                        const item = data.items.id(id);
                         Object.entries(payload).forEach(([key, value]) => {
-                            data.items[id][key] = value;
+                            item[key] = value;
                          });
                         data.save((listErr) => {
                             if (listErr) {
@@ -81,7 +91,7 @@ export default class MangoOpItem {
                     if (!data) {
                         reject("List not found!");
                     } else {
-                        resolve(data.items[id]);
+                        resolve(Item.parse(data.items.id(id)));
                     }
                 }
             });

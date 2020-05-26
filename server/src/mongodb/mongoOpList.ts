@@ -1,15 +1,12 @@
 import { Document, Mixed, model, Schema } from "mongoose";
 import List from "../models/list";
+import { ListSchema } from "./mongoSchema";
 
 interface IList extends Document {
     title: string;
-    items?: {};
+    items?: [];
 }
-const schema =  new Schema({
-    items: {type: Map, of: Mixed},
-    title: { type: String, required: true },
-});
-export const ListModel = model<IList>("List", schema);
+export const ListModel = model<IList>("List", ListSchema);
 
 export class MangoOpList {
     public static insertToDB(data: List) {
