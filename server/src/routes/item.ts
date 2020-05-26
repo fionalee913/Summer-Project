@@ -13,20 +13,20 @@ router.post("/add", (req, res) => {
 router.post("/delete", (req, res) => {
     MangoOpItem.deleteFromDB(req.body.listID, req.body.id)
         .then(() => res.status(200).send())
-        .catch(() => res.status(500).send());
+        .catch((err) => res.status(500).send(err));
 });
 
 router.post("/update", (req, res) => {
     const {listID, id, ...payload} = req.body;
     MangoOpItem.updateFromDB(listID, id, payload)
         .then(() => res.status(200).send())
-        .catch(() => res.status(500).send());
+        .catch((err) => res.status(500).send(err));
 });
 
 router.get("/:listID/:id", (req, res) => {
     MangoOpItem.getFromDB(req.params.listID, req.params.id)
         .then((data) => res.status(200).json(data))
-        .catch(() => res.status(500).send());
+        .catch((err) => res.status(500).send(err));
 });
 
 export default router;

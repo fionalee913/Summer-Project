@@ -21,7 +21,7 @@ export class MangoOpItem {
                         const itemID = new Types.ObjectId();
                         data.items.push({
                             ...item,
-                            _id:  itemID,
+                            _id: itemID,
                         });
                         data.save((listErr) => {
                             if (listErr) {
@@ -44,20 +44,25 @@ export class MangoOpItem {
                     if (!data) {
                         reject("List not found!");
                     } else {
-                        data.items.id(id).remove();
-                        data.save((listErr) => {
-                            if (listErr) {
-                                reject("List saving error");
-                            } else {
-                                resolve();
-                            }
-                        });
+                        const item = data.items.id(id);
+                        if (!item) {
+                            reject("Item not found!");
+                        } else {
+                            item.remove();
+                            data.save((listErr) => {
+                                if (listErr) {
+                                    reject("List saving error");
+                                } else {
+                                    resolve();
+                                }
+                            });
+                        }
                     }
                 }
             });
         });
     }
-    public static updateFromDB(listID: string, id: string, payload: Map<string, string|boolean|number>) {
+    public static updateFromDB(listID: string, id: string, payload: Map<string, string | boolean | number>) {
         return new Promise((resolve, reject) => {
             ListModel.findById(listID, (err, data) => {
                 if (err) {
@@ -67,16 +72,20 @@ export class MangoOpItem {
                         reject("List not found!");
                     } else {
                         const item = data.items.id(id);
-                        Object.entries(payload).forEach(([key, value]) => {
-                            item[key] = value;
-                         });
-                        data.save((listErr) => {
-                            if (listErr) {
-                                reject("List saving error");
-                            } else {
-                                resolve();
-                            }
-                        });
+                        if (!item) {
+                            reject("Item not found");
+                        } else {
+                            Object.entries(payload).forEach(([key, value]) => {
+                                item[key] = value;
+                            });
+                            data.save((listErr) => {
+                                if (listErr) {
+                                    reject("List saving error");
+                                } else {
+                                    resolve();
+                                }
+                            });
+                        }
                     }
                 }
             });
@@ -91,7 +100,12 @@ export class MangoOpItem {
                     if (!data) {
                         reject("List not found!");
                     } else {
-                        resolve(Item.parse(data.items.id(id)));
+                        const item = data.items.id(id);
+                        if (item) {
+                            resolve(Item.parse(item));
+                        } else {
+                            resolve({});
+                        }
                     }
                 }
             });
