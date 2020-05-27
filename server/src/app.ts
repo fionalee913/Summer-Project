@@ -1,6 +1,8 @@
 import bodyParser from "body-parser";
 import express from "express";
 import mongoose from "mongoose";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 import itemRouter from "./routes/item";
 import listRouter from "./routes/list";
 
@@ -22,6 +24,23 @@ app.get("/", (req, res) => {
 
 app.use("/api/item", itemRouter);
 app.use("/api/list", listRouter);
+
+const swaggerDefinition = {
+  info: {
+    // API informations (required)
+    basePath: "/api", // Base path (optional),
+    title: "TODO List API", // Title (required)
+    version: "1.0.0", // Version (required)
+  },
+};
+const options = {
+  apis: ["./src/routes/*.ts"], // <-- not in the definition, but in the options
+  swaggerDefinition,
+
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(port, () => {
   return console.log(`server is listening on ${port}`);
