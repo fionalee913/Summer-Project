@@ -26,9 +26,9 @@ app.use("/api/item", itemRouter);
 app.use("/api/list", listRouter);
 
 const swaggerDefinition = {
+  basePath: "/api", // Base path (optional),
   info: {
     // API informations (required)
-    basePath: "/api", // Base path (optional),
     title: "TODO List API", // Title (required)
     version: "1.0.0", // Version (required)
   },
