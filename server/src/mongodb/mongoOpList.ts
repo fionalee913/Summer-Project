@@ -83,7 +83,7 @@ export class MangoOpList {
                     lists.forEach((list)  =>
                       result.push(List.parse(list)),
                     );
-                    resolve(lists);
+                    resolve(result);
                 }
             });
         });

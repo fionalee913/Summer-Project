@@ -113,7 +113,7 @@ router.post("/update", (req, res) => {
 /**
  * @swagger
  * paths:
- *   /api//item/{listID}/{id}:
+ *   /api/item/{listID}/{id}:
  *     get:
  *       summary: get an item
  *       parameters:
