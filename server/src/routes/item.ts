@@ -5,7 +5,7 @@ const router = express.Router();
 /**
  * @swagger
  * paths:
- *   api/item/add:
+ *   /api/item/add:
  *     post:
  *       summary: add a new item
  *       parameters:
@@ -39,7 +39,7 @@ router.post("/add", (req, res) => {
 /**
  * @swagger
  * paths:
- *   api/item/delete:
+ *   /api/item/delete:
  *     post:
  *       summary: delete an item
  *       parameters:
@@ -74,7 +74,7 @@ router.post("/delete", (req, res) => {
 /**
  * @swagger
  * paths:
- *   api/item/update:
+ *   /api/item/update:
  *     post:
  *       summary: update an item.
  *       parameters:
@@ -113,7 +113,7 @@ router.post("/update", (req, res) => {
 /**
  * @swagger
  * paths:
- *   api/item/{listID}/{id}:
+ *   /api//item/{listID}/{id}:
  *     get:
  *       summary: get an item
  *       parameters:
