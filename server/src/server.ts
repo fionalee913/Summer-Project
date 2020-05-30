@@ -10,7 +10,6 @@ const app = express();
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-console.log(process.env.LOCAL_DB_URL);
 mongoose.connect(process.env.MONGODB_URI || process.env.LOCAL_DB_URL,
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 const mongodb = mongoose.connection;

@@ -24,7 +24,6 @@ describe('item API testing', () => {
     });
       
     test("add item", async () => {
-
          const response = await request.post("/api/item/add")
          .send({
            title: "test item",
