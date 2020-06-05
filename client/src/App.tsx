@@ -35,6 +35,61 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import axios from 'axios';
+import { threadId } from 'worker_threads';
+
+export class ShowResponse extends React.Component{
+  state = {
+      title: " ",
+      id: 0,
+  }
+
+  componentDidMount() {
+  axios.get('/list')
+  .then(res =>{
+    console.log(res.data);
+  }).catch(err => {
+    console.log(err);
+  })
+  }
+
+  render(){
+    return (
+      <ul>
+        <li>title: {this.state.title}</li>
+        <li>id: {this.state.id}</li>
+      </ul>
+    )
+  }
+}
+
+export class ShowList extends React.Component{
+  state = {
+      data: [],
+  }
+
+  componentDidMount() {
+  axios.get('/list')
+  .then(res =>{
+    console.log(res);
+    const data = res.data;
+    this.setState({data});
+    res.data.forEach((item:{title:string}) => {
+      console.log(item.title);
+    });
+  }).catch(err => {
+    console.log(err);
+  })
+  }
+
+  render(){
+    return (
+        this.state.data.map((item:{title:string, id:string}) => 
+          <ListItemLink to={"/list/" + item.id} primary={item.title} />
+        )
+    )
+  }
+}
 
 interface ListItemLinkProps {
   icon?: React.ReactElement;
@@ -164,10 +219,10 @@ function App() {
       </Tooltip>
 	  <Switch>
           <Route path="/add">
-            <Add />
+            <Home />
           </Route>
-          <Route path="/active">
-            <Active />
+          <Route path="/list">
+            <ShowResponse/>
           </Route>
           <Route path="/completed">
             <Completed />
@@ -198,18 +253,17 @@ function ButtonAppBar(){
 
   const drawer = (
     <div>
-      
-      <List>
-        <ListItemLink to="/active" primary="Active" icon={<ListIcon/>} />
-        <ListItemLink to="/completed" primary="Completed" icon={<DoneIcon/>} />
+        <List>
+          <ListItemLink to="/add" primary="Add List" icon={<AddIcon/>} />
         </List>
         <Divider />
         <List>
-        <ListItemLink to="/my-account" primary="My Account" icon={<AccountCircle/>} />
-        <ListItemLink to="/logout" primary="Logout" icon={<ExitToAppIcon/>} />
+        <ShowList/>
         </List>
     </div>
   );
+
+  
 
   return (
     <div className={classes.root}>
@@ -247,11 +301,11 @@ function Home() {
 }
 
 function Add() {
-  return <h2>Add</h2>;
+  return axios.get('api/list');
 }
 
 function Active() {
-  return <h2>Active</h2>;
+  return <h2>active</h2>;
 }
 
 function Completed() {
