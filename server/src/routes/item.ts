@@ -33,7 +33,7 @@ router.post("/add", (req, res) => {
     const item = new Item(req.body.title, req.body.listID);
     MangoOpItem.insertToDB(item)
         .then((id) => res.status(200).json({id}))
-        .catch(() => res.status(500).send());
+        .catch((err) => res.status(500).send(err));
 });
 
 /**

@@ -9,5 +9,6 @@ const ItemSchema =  new Schema({
 
 export const ListSchema =  new Schema({
     items:   [ItemSchema],
+    timestamp: {type: Number, required: true},
     title: { type: String, required: true },
 });

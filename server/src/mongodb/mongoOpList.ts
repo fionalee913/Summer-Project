@@ -12,6 +12,7 @@ export class MangoOpList {
     public static insertToDB(data: List) {
         return new Promise((resolve, reject) => {
             const list = ListModel({
+                timestamp: data.timestamp,
                 title:  data.title,
             });
             list.save((err, res) => {
@@ -83,6 +84,7 @@ export class MangoOpList {
                     lists.forEach((list)  =>
                       result.push(List.parse(list)),
                     );
+                    result.sort((a, b) => a.timestamp > b.timestamp ? 1 : -1);
                     resolve(result);
                 }
             });

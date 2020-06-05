@@ -7,5 +7,10 @@
     "rules": {
         "no-console": false 
     },
-    "rulesDirectory": []
+    "rulesDirectory": [],
+    "linterOptions": {
+        "exclude": [
+          "test/*"
+        ]
+    }
 }
