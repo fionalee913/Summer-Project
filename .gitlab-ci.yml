@@ -1,6 +1,7 @@
 image: node
 
 before_script:
+  - /bin/sh ip.sh
   - cd server
   - npm install
   - cd ..
