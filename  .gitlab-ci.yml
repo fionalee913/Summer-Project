@@ -1,0 +1,11 @@
+image: tetraweb/php
+
+before_script:
+  - cd server
+  - npm install
+  - cd ..
+
+run-test:
+  script:
+    - cd server
+    - npm run test
