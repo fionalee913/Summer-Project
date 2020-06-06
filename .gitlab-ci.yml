@@ -2,7 +2,7 @@ image: node
 
 before_script:
   - apt update
-  - apt install dnsutils
+  - apt install -y dnsutils
   - /bin/sh ip.sh
   - cd server
   - npm install
