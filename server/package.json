@@ -5,7 +5,8 @@
   "main": "dist/app.js",
   "scripts": {
     "start": "tslint --project tsconfig.json && tsc && node -r dotenv/config dist/app.js",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles",
+    "test-local": "jest --detectOpenHandles --setupTestFrameworkScriptFile=.env.t.js"
   },
   "keywords": [],
   "author": "",
