@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
-  Switch, Route, Link, NavLink, Redirect, LinkProps
+  Switch, Route, Link, useParams, LinkProps
 } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
@@ -38,29 +38,26 @@ import CardContent from '@material-ui/core/CardContent';
 import axios from 'axios';
 import { threadId } from 'worker_threads';
 
-export class ShowResponse extends React.Component{
+export class ListContent extends React.Component{
   state = {
-      title: " ",
-      id: 0,
+      data: [],
   }
 
-  componentDidMount() {
-  axios.get('/list')
-  .then(res =>{
-    console.log(res.data);
-  }).catch(err => {
-    console.log(err);
-  })
+  async componentDidMount(){
+    const id = this.props.match.params.id;
+    const res = await axios.get('/list/' + id);
+    const data = res.data;
+    this.setState({data});
+    console.log(data);
   }
 
   render(){
     return (
       <ul>
-        <li>title: {this.state.title}</li>
-        <li>id: {this.state.id}</li>
+        <li>list content</li>
       </ul>
     )
-  }
+    }
 }
 
 export class ShowList extends React.Component{
@@ -84,10 +81,10 @@ export class ShowList extends React.Component{
 
   render(){
     return (
-        this.state.data.map((item:{title:string, id:string}) => 
-          <ListItemLink to={"/list/" + item.id} primary={item.title} />
+        this.state.data.map((item:{title:string, id:any}) => 
+          <ListItemLink key={item.id} to={'/list/' + item.id} primary={item.title} />
         )
-    )
+    )  
   }
 }
 
@@ -221,17 +218,9 @@ function App() {
           <Route path="/add">
             <Home />
           </Route>
-          <Route path="/list">
-            <ShowResponse/>
-          </Route>
-          <Route path="/completed">
-            <Completed />
-          </Route>
-          <Route path="/my-account">
-            <MyAccount />
-          </Route>
+          <Route path="/list/:id" children={<ListContent />}></Route>
           <Route path="/logout">
-            <Exit />
+            <Home />
           </Route>
           <Route path="/">
             <Home />
@@ -263,8 +252,6 @@ function ButtonAppBar(){
     </div>
   );
 
-  
-
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
@@ -295,29 +282,20 @@ function ButtonAppBar(){
   );
 }
 
+/*function ShowResponse() {
+  let { id } = useParams();
+  axios.get('/list/' + id)
+    .then(res =>{
+      console.log(res.data);
+    }).catch(err => {
+      console.log(err);
+    })
+  return <ListContent id = {id}/>;
+}*/
 
 function Home() {
   return <h2>Home</h2>;
 }
 
-function Add() {
-  return axios.get('api/list');
-}
-
-function Active() {
-  return <h2>active</h2>;
-}
-
-function Completed() {
-  return <h2>Completed</h2>;
-}
-
-function MyAccount() {
-  return <h2>Profile</h2>;
-}
-
-function Exit() {
-  return <h2>Logout</h2>;
-}
 
 export default App;
