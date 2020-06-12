@@ -38,17 +38,26 @@ import CardContent from '@material-ui/core/CardContent';
 import axios from 'axios';
 import { threadId } from 'worker_threads';
 
-export class ListContent extends React.Component{
+export class ListContent extends React.Component<{id: string}>{
   state = {
       data: [],
   }
-
   async componentDidMount(){
-    const id = this.props.match.params.id;
+    const id = this.props.id;
     const res = await axios.get('/list/' + id);
     const data = res.data;
     this.setState({data});
     console.log(data);
+  }
+
+  async componentDidUpdate(prevProps:{id:string}){
+    if(this.props.id != prevProps.id){
+    const id = this.props.id;
+    const res = await axios.get('/list/' + id);
+    const data = res.data;
+    this.setState({data});
+    console.log(data);
+    }
   }
 
   render(){
@@ -218,7 +227,7 @@ function App() {
           <Route path="/add">
             <Home />
           </Route>
-          <Route path="/list/:id" children={<ListContent />}></Route>
+          <Route path="/list/:id" children={<ShowResponse />}></Route>
           <Route path="/logout">
             <Home />
           </Route>
@@ -282,7 +291,7 @@ function ButtonAppBar(){
   );
 }
 
-/*function ShowResponse() {
+function ShowResponse() {
   let { id } = useParams();
   axios.get('/list/' + id)
     .then(res =>{
@@ -291,7 +300,7 @@ function ButtonAppBar(){
       console.log(err);
     })
   return <ListContent id = {id}/>;
-}*/
+}
 
 function Home() {
   return <h2>Home</h2>;
