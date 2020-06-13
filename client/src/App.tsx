@@ -4,97 +4,99 @@ import {
   BrowserRouter as Router,
   Switch, Route, Link, useParams, LinkProps
 } from 'react-router-dom';
-import logo from './logo.svg';
 import './App.css';
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid, {GridSpacing} from '@material-ui/core/Grid';
+import Grid, { GridSpacing } from '@material-ui/core/Grid';
 import { fade, makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import clsx from 'clsx';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import {Divider, ListItem, ListItemIcon, ListItemText,
+  Toolbar, Typography, Drawer, List,
+   AppBar, Paper, Fab, Tooltip,
+   Card, CardContent, Button, Checkbox} from '@material-ui/core/'
 import AddIcon from '@material-ui/icons/Add';
-import DoneIcon from '@material-ui/icons/Done';
-import ListIcon from '@material-ui/icons/List';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Paper from '@material-ui/core/Paper';
 import { Omit } from '@material-ui/types';
-import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Tooltip from '@material-ui/core/Tooltip';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import axios from 'axios';
-import { threadId } from 'worker_threads';
+import ScaleLoader from "react-spinners/ScaleLoader";
 
-export class ListContent extends React.Component<{id: string}>{
+export class ListContent extends React.Component<{ id: string }>{
   state = {
-      data: [],
-  }
-  async componentDidMount(){
-    const id = this.props.id;
-    const res = await axios.get('/list/' + id);
-    const data = res.data;
-    this.setState({data});
-    console.log(data);
+    data: [],
   }
 
-  async componentDidUpdate(prevProps:{id:string}){
-    if(this.props.id != prevProps.id){
+  updateListData() {
     const id = this.props.id;
-    const res = await axios.get('/list/' + id);
-    const data = res.data;
-    this.setState({data});
-    console.log(data);
+    axios.get('/list/' + id)
+      .then(res => {
+        const data = res.data;
+        this.setState({ data });
+        console.log(data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+  async componentDidMount() {
+    await this.updateListData();
+
+  }
+
+  async componentDidUpdate(prevProps: { id: string }) {
+    if (this.props.id != prevProps.id) {
+      await this.updateListData();
     }
   }
 
-  render(){
+  render() {
     return (
       <ul>
         <li>list content</li>
       </ul>
     )
-    }
+  }
 }
 
-export class ShowList extends React.Component{
+export class ShowList extends React.Component {
   state = {
-      data: [],
+    data: [],
+    loading: false,
   }
 
   componentDidMount() {
-  axios.get('/list')
-  .then(res =>{
-    console.log(res);
-    const data = res.data;
-    this.setState({data});
-    res.data.forEach((item:{title:string}) => {
-      console.log(item.title);
-    });
-  }).catch(err => {
-    console.log(err);
-  })
+    this.setState({ loading: true }, () => {
+      axios.get('/list')
+        .then(res => {
+          console.log(res);
+          const data = res.data;
+          this.setState({ data });
+          res.data.forEach((item: { title: string }) => {
+            console.log(item.title);
+          });
+        }).catch(err => {
+          console.log(err);
+        })
+        .finally(() =>
+          this.setState({ loading: false })
+        )
+    })
+
   }
 
-  render(){
+  render() {
     return (
-        this.state.data.map((item:{title:string, id:any}) => 
-          <ListItemLink key={item.id} to={'/list/' + item.id} primary={item.title} />
-        )
-    )  
+      <>
+        <ScaleLoader
+          color={"#3F51B5"}
+          loading={this.state.loading}
+        />
+        {
+          this.state.data.map((item: { title: string, id: any }) =>
+            <ListItemLink key={item.id} to={'/list/' + item.id} primary={item.title} />
+          )
+        }
+      </>
+    )
   }
+
 }
 
 interface ListItemLinkProps {
@@ -152,7 +154,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    
+
   },
   content: {
     flexGrow: 1,
@@ -192,72 +194,72 @@ function App() {
   return (
     <div className="App">
       <header>
-      <Router>
-        <ButtonAppBar />
-        <main className={classes.content}>
-    <nav>   
-	    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <Paper className={classes.paper} elevation={2}>
-        <Checkbox
-        checked={checked}
-        onChange={handleChange}
-        inputProps={{ 'aria-label': 'primary checkbox' }}
-      />exmaple list item</Paper>
-      </Grid>
-      <Card className={classes.card}>
-        <CardContent>
-        <Checkbox
-        checked={checked}
-        onChange={handleChange}
-        inputProps={{ 'aria-label': 'primary checkbox' }}
-      />
-            example list item 2
+        <Router>
+          <ButtonAppBar />
+          <main className={classes.content}>
+            <nav>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Paper className={classes.paper} elevation={2}>
+                    <Checkbox
+                      checked={checked}
+                      onChange={handleChange}
+                      inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />exmaple list item</Paper>
+                </Grid>
+                <Card className={classes.card}>
+                  <CardContent>
+                    <Checkbox
+                      checked={checked}
+                      onChange={handleChange}
+                      inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />
+                    example list item 2
         </CardContent>
-      </Card>
-      </Grid>
-    </nav>
-    </main>
-    <Tooltip title="Add" aria-label="add">
-        <Fab color="primary" className={classes.absolute}>
-          <AddIcon />
-        </Fab>
-      </Tooltip>
-	  <Switch>
-          <Route path="/add">
-            <Home />
-          </Route>
-          <Route path="/list/:id" children={<ShowResponse />}></Route>
-          <Route path="/logout">
-            <Home />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-    </Switch>
-    </Router>
-    </header>
+                </Card>
+              </Grid>
+            </nav>
+          </main>
+          <Tooltip title="Add" aria-label="add">
+            <Fab color="primary" className={classes.absolute}>
+              <AddIcon />
+            </Fab>
+          </Tooltip>
+          <Switch>
+            <Route path="/add">
+              <Home />
+            </Route>
+            <Route path="/list/:id" children={<ShowResponse />}></Route>
+            <Route path="/logout">
+              <Home />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </Router>
+      </header>
       <Button variant="contained" color="secondary">
         Primary
       </Button>
-      
+
     </div>
   );
 }
 
-function ButtonAppBar(){
+function ButtonAppBar() {
   const classes = useStyles();
   const theme = useTheme();
 
   const drawer = (
     <div>
-        <List>
-          <ListItemLink to="/add" primary="Add List" icon={<AddIcon/>} />
-        </List>
-        <Divider />
-        <List>
-        <ShowList/>
-        </List>
+      <List>
+        <ListItemLink to="/add" primary="Add List" icon={<AddIcon />} />
+      </List>
+      <Divider />
+      <List>
+        <ShowList />
+      </List>
     </div>
   );
 
@@ -268,21 +270,21 @@ function ButtonAppBar(){
           <Typography variant="h6" className={classes.title} align='left'>
             To-Do List
           </Typography>
-          <Tooltip title="Delete List" aria-label="delete"> 
+          <Tooltip title="Delete List" aria-label="delete">
             <DeleteIcon />
           </Tooltip>
         </Toolbar>
       </AppBar>
       <nav>
-      <Drawer
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            variant="permanent"
-            open
-          >
-            {drawer}
-      </Drawer>
+        <Drawer
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          variant="permanent"
+          open
+        >
+          {drawer}
+        </Drawer>
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
@@ -294,17 +296,16 @@ function ButtonAppBar(){
 function ShowResponse() {
   let { id } = useParams();
   axios.get('/list/' + id)
-    .then(res =>{
+    .then(res => {
       console.log(res.data);
     }).catch(err => {
       console.log(err);
     })
-  return <ListContent id = {id}/>;
+  return <ListContent id={id} />;
 }
 
 function Home() {
   return <h2>Home</h2>;
 }
-
 
 export default App;
