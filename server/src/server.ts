@@ -1,6 +1,7 @@
 import bodyParser from "body-parser";
 import express from "express";
 import mongoose from "mongoose";
+import path from "path";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import itemRouter from "./routes/item";
@@ -16,9 +17,9 @@ const mongodb = mongoose.connection;
 mongodb.on("open", () => console.log("Connection success to mongodb"));
 mongodb.on("error", () => console.log("Connection failed to mongodb"));
 
-app.get("/", (req, res) => {
-    res.sendFile("index.html");
-});
+// app.get("/", (req, res) => {
+//     res.sendFile("index.html");
+// });
 
 app.use("/api/item", itemRouter);
 app.use("/api/list", listRouter);
@@ -38,5 +39,9 @@ const options = {
 
 const swaggerSpec = swaggerJSDoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.get("/*", (req, res) => {
+  res.sendFile("index.html", { root: path.join(__dirname, "../public") });
+});
 
 export default app;
