@@ -144,11 +144,16 @@ function ListItems(props: {title: string, isCompleted: boolean, id: any, listID:
   )
 }
 
-class AddItem extends React.Component<{listID: any}>{
-  state = {
-    listID: this.props.listID,
-    title: "",
-    open: false,
+class AddItem extends React.Component<{listID: any}, {listID: string, title: string, open: boolean}>{
+
+  constructor (props: {listID: any}) {
+    super(props);
+    let {listID} = this.props;
+    this.state = {
+      listID: listID,
+      title: "",
+      open: false,
+    }
   }
 
   handleClickOpen = () => {
