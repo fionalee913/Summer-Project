@@ -8,9 +8,9 @@ import './App.css';
 import Grid, { GridSpacing } from '@material-ui/core/Grid';
 import { fade, makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 import {Divider, ListItem, ListItemIcon, ListItemText,
-  Toolbar, Typography, Drawer, List,
-   AppBar, Paper, Fab, Tooltip,
-   Card, CardContent, Button, Checkbox} from '@material-ui/core/'
+  Toolbar, Typography, Drawer, List, Dialog, DialogContent, DialogTitle, DialogActions,
+   AppBar, Paper, Fab, Tooltip, TextField,
+   Card, CardContent, Button, Checkbox, ListItemSecondaryAction} from '@material-ui/core/'
 import AddIcon from '@material-ui/icons/Add';
 import { Omit } from '@material-ui/types';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -26,9 +26,12 @@ export class ListContent extends React.Component<{ id: string }>{
     const id = this.props.id;
     axios.get('/list/' + id)
       .then(res => {
-        const data = res.data;
+        const data = res.data.items;
         this.setState({ data });
         console.log(data);
+        res.data.items.forEach((item: { title: string }) => {
+            console.log(item.title);
+          });
       })
       .catch(err => {
         console.log(err);
@@ -48,9 +51,11 @@ export class ListContent extends React.Component<{ id: string }>{
 
   render() {
     return (
-      <ul>
-        <li>list content</li>
-      </ul>
+      <Grid container spacing={3}>
+      {this.state.data.map((item: { title: string, isCompleted: boolean, id: any, listID: any}) =>
+        <ListItems key={item.id} title={item.title} isCompleted={item.isCompleted} id={item.id} listID={item.listID} />
+      )}
+      </Grid>
     )
   }
 }
@@ -97,6 +102,113 @@ export class ShowList extends React.Component {
     )
   }
 
+}
+
+// pass item title, iscompleted
+function ListItems(props: {title: string, isCompleted: boolean, id: any, listID: any}){
+  const { title, isCompleted, id, listID} = props;
+  const classes = useStyles();
+  const [checked, setChecked] = (isCompleted ? React.useState(true) : React.useState(false) );
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+    const updateItem = {
+       id: id,
+       listID: listID,
+       isCompleted: !isCompleted,
+    };
+    console.log({updateItem});
+    axios.post('/item/update', updateItem)
+    .then(res =>{
+      console.log(res.data);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  };
+
+  return (
+    <main className={classes.content}>
+    <Grid item xs>
+    <Card className={classes.card}>
+      <CardContent>
+      <Checkbox
+        checked={checked}
+        onChange={handleChange}
+        inputProps={{ 'aria-label': 'primary checkbox' }}
+      />
+      {title}</CardContent>
+    </Card>
+    </Grid>
+    <AddItem listID={listID}/>
+    </main>
+  )
+}
+
+class AddItem extends React.Component<{listID: any}>{
+  state = {
+    listID: this.props.listID,
+    title: "",
+    open: false,
+  }
+
+  handleClickOpen = () => {
+    this.setState({open: true});
+  };
+  handleClose = () => {
+    this.setState({open: false});
+  };
+  
+  handleSubmit = () => {
+    const newItem = {
+      listID: this.state.listID,
+      title: this.state.title,
+    };
+    axios.post('/item/add', newItem)
+    .then(res =>{
+      console.log(res.data);
+    })
+    .catch(err => {
+      console.log(newItem.listID);
+      console.log(err);
+    })
+  };
+  render() {
+  return (
+  <>
+    <Tooltip title="Add" aria-label="add">
+      <Fab color="primary" onClick={this.handleClickOpen}>
+        <AddIcon />
+      </Fab>
+    </Tooltip>
+    <Dialog open={this.state.open} onClose={this.handleClose}>
+      <DialogContent>
+        <DialogTitle>
+          Add new item
+        </DialogTitle>
+        <TextField
+            autoFocus
+            margin="dense"
+            label="new item"
+            fullWidth
+            onChange={(evt) => {
+              console.log(evt.target.value);
+              this.setState({title: evt.target.value});
+            }}
+            value={this.state.title}
+          />
+      </DialogContent>
+      <DialogActions>
+          <Button onClick={this.handleSubmit} color="primary">
+            Add
+          </Button>
+          <Button onClick={this.handleClose} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+    </Dialog>
+  </>
+  )
+  }
 }
 
 interface ListItemLinkProps {
@@ -186,63 +298,24 @@ const drawerWidth = 240;
 
 function App() {
   const classes = useStyles();
-  const [checked, setChecked] = React.useState(true);
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
 
   return (
     <div className="App">
       <header>
         <Router>
           <ButtonAppBar />
-          <main className={classes.content}>
-            <nav>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Paper className={classes.paper} elevation={2}>
-                    <Checkbox
-                      checked={checked}
-                      onChange={handleChange}
-                      inputProps={{ 'aria-label': 'primary checkbox' }}
-                    />exmaple list item</Paper>
-                </Grid>
-                <Card className={classes.card}>
-                  <CardContent>
-                    <Checkbox
-                      checked={checked}
-                      onChange={handleChange}
-                      inputProps={{ 'aria-label': 'primary checkbox' }}
-                    />
-                    example list item 2
-        </CardContent>
-                </Card>
-              </Grid>
-            </nav>
-          </main>
-          <Tooltip title="Add" aria-label="add">
-            <Fab color="primary" className={classes.absolute}>
-              <AddIcon />
-            </Fab>
-          </Tooltip>
+          <main className={classes.content} />
           <Switch>
             <Route path="/add">
               <Home />
             </Route>
             <Route path="/list/:id" children={<ShowResponse />}></Route>
-            <Route path="/logout">
-              <Home />
-            </Route>
             <Route path="/">
               <Home />
             </Route>
           </Switch>
         </Router>
       </header>
-      <Button variant="contained" color="secondary">
-        Primary
-      </Button>
-
     </div>
   );
 }
