@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import './App.css';
 import Grid, { GridSpacing } from '@material-ui/core/Grid';
-import { fade, makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import { fade, makeStyles, Theme, createStyles, unstable_createMuiStrictModeTheme, ThemeProvider } from '@material-ui/core/styles';
 import {Divider, ListItem, ListItemIcon, ListItemText,
   Toolbar, Typography, Drawer, List, Dialog, DialogContent, DialogTitle, DialogActions,
    AppBar, Paper, Fab, Tooltip, TextField,
@@ -304,9 +304,12 @@ const drawerWidth = 240;
 function App() {
   const classes = useStyles();
 
+  const theme = unstable_createMuiStrictModeTheme();
+
   return (
     <div className="App">
       <header>
+      <ThemeProvider theme={theme}>
         <Router>
           <ButtonAppBar />
           <main className={classes.content} />
@@ -320,6 +323,7 @@ function App() {
             </Route>
           </Switch>
         </Router>
+        </ThemeProvider>
       </header>
     </div>
   );
@@ -327,7 +331,6 @@ function App() {
 
 function ButtonAppBar() {
   const classes = useStyles();
-  const theme = useTheme();
 
   const drawer = (
     <div>
