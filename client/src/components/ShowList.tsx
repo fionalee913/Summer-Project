@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import axios from 'axios';
-import App from './App';
+import App from '../App';
 import ScaleLoader from "react-spinners/ScaleLoader";
 import ListItemLink from './ListItemLink';
 

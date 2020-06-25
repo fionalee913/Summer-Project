@@ -1,13 +1,13 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import axios from 'axios';
-import App from './App';
+import App from '../App';
 import {Divider, ListItem, ListItemIcon, ListItemText,
     Toolbar, Typography, Drawer, List, Dialog, DialogContent, DialogTitle, DialogActions,
      AppBar, Paper, Fab, Tooltip, TextField,
      Card, CardContent, Button, Checkbox, ListItemSecondaryAction} from '@material-ui/core/';
 import Grid, { GridSpacing } from '@material-ui/core/Grid';
-import {useStyles} from './UseStyles';
+import {useStyles} from '../styles/UseStyles';
 
 // pass item title, iscompleted
 export default function ListItems(props: {title: string, isCompleted: boolean, id: any, listID: any}){

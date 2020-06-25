@@ -16,12 +16,12 @@ import { Omit } from '@material-ui/types';
 import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios';
 import ScaleLoader from "react-spinners/ScaleLoader";
-import ListContent from './ListContent';
-import ShowList from './ShowList';
-import AddItem from './AddItem';
-import AddList from './AddList';
-import ListItemLink from './ListItemLink';
-import { useStyles, withStyle } from './UseStyles';
+import ListContent from './components/ListContent';
+import ShowList from './components/ShowList';
+import AddItem from './components/AddItem';
+import AddList from './components/AddList';
+import ListItemLink from './components/ListItemLink';
+import { useStyles, withStyle } from './styles/UseStyles';
 
 class App extends React.Component<{classes: any}, {}> {
   render() {

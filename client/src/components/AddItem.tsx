@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import axios from 'axios';
-import App from './App';
+import App from '../App';
 import {
   Divider, ListItem, ListItemIcon, ListItemText,
   Toolbar, Typography, Drawer, List, Dialog, DialogContent, DialogTitle, DialogActions,
@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core/';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import AddIcon from '@material-ui/icons/Add';
-import { withStyle } from './UseStyles';
+import { withStyle } from '../styles/UseStyles';
 
 class AddItem extends React.Component<{ listID: any, classes: any, updateList: any }, { listID: string, title: string, open: boolean, success: boolean, fail: boolean, showBar: boolean }>{
 

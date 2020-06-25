@@ -5,7 +5,7 @@ import {Divider, ListItem, ListItemIcon, ListItemText,
     Toolbar, Typography, Drawer, List, Dialog, DialogContent, DialogTitle, DialogActions,
      AppBar, Paper, Fab, Tooltip, TextField,
      Card, CardContent, Button, Checkbox, ListItemSecondaryAction} from '@material-ui/core/';
-import App from './App';
+import App from '../App';
 import ScaleLoader from "react-spinners/ScaleLoader";
 import ListItemLink from './ListItemLink';
 

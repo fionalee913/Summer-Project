@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import axios from 'axios';
 import Grid, { GridSpacing } from '@material-ui/core/Grid';
-import App from './App';
+import App from '../App';
 import AddItem from './AddItem';
 import ListItems from './ListItems';
 
