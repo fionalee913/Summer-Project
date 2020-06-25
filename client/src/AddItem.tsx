@@ -7,10 +7,11 @@ import {Divider, ListItem, ListItemIcon, ListItemText,
      AppBar, Paper, Fab, Tooltip, TextField,
      Card, CardContent, Button, Checkbox, ListItemSecondaryAction} from '@material-ui/core/';
 import AddIcon from '@material-ui/icons/Add';
+import {withStyle} from './UseStyles';
 
-export default class AddItem extends React.Component<{listID: any}, {listID: string, title: string, open: boolean}>{
+ class AddItem extends React.Component<{listID: any, classes: any}, {listID: string, title: string, open: boolean}>{
 
-    constructor (props: {listID: any}) {
+    constructor (props: {listID: any, classes: any}) {
       super(props);
       let {listID} = this.props;
       this.state = {
@@ -35,17 +36,19 @@ export default class AddItem extends React.Component<{listID: any}, {listID: str
       axios.post('/item/add', newItem)
       .then(res =>{
         console.log(res.data);
+        this.handleClose();
       })
       .catch(err => {
         console.log(newItem.listID);
         console.log(err);
+
       })
     };
   
     render() {
     return (
     <>
-      <Tooltip title="Add" aria-label="add" >
+      <Tooltip title="Add" aria-label="add" className={this.props.classes.absolute}>
         <Fab color="primary" onClick={this.handleClickOpen} >
           <AddIcon />
         </Fab>
@@ -80,3 +83,5 @@ export default class AddItem extends React.Component<{listID: any}, {listID: str
     )
     }
   }
+
+  export default withStyle(AddItem);

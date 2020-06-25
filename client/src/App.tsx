@@ -20,36 +20,34 @@ import ListContent from './ListContent';
 import ShowList from './ShowList';
 import AddItem from './AddItem';
 import ListItemLink from './ListItemLink';
-import { useStyles } from './UseStyles';
+import { useStyles, withStyle } from './UseStyles';
 
-
-
-function App() {
-  const classes = useStyles();
-
-  const theme = unstable_createMuiStrictModeTheme();
-
-  return (
-    <div className="App">
-      <header>
-      <ThemeProvider theme={theme}>
-        <Router>
-          <ButtonAppBar />
-          <main className={classes.content} />
-          <Switch>
-            <Route path="/add">
-              <Home />
-            </Route>
-            <Route path="/list/:id" children={<ShowResponse />}></Route>
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
-        </Router>
-        </ThemeProvider>
-      </header>
-    </div>
-  );
+class App extends React.Component<{classes: any}, {}> {
+  render() {
+    const theme = unstable_createMuiStrictModeTheme();
+    const {classes} = this.props;
+    return (
+      <div className="App">
+        <header>
+        <ThemeProvider theme={theme}>
+          <Router>
+            <ButtonAppBar />
+            <main className={classes.content} />
+            <Switch>
+              <Route path="/add">
+                <Home />
+              </Route>
+              <Route path="/list/:id" children={<ShowResponse />}></Route>
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
+          </Router>
+          </ThemeProvider>
+        </header>
+      </div>
+    );
+  }
 }
 
 function ButtonAppBar() {
@@ -112,4 +110,4 @@ function Home() {
   return <h2>Home</h2>;
 }
 
-export default App;
+export default withStyle(App);
