@@ -19,6 +19,7 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 import ListContent from './ListContent';
 import ShowList from './ShowList';
 import AddItem from './AddItem';
+import AddList from './AddList';
 import ListItemLink from './ListItemLink';
 import { useStyles, withStyle } from './UseStyles';
 
@@ -35,7 +36,7 @@ class App extends React.Component<{classes: any}, {}> {
             <main className={classes.content} />
             <Switch>
               <Route path="/add">
-                <Home />
+                <AddList />
               </Route>
               <Route path="/list/:id" children={<ShowResponse />}></Route>
               <Route path="/">

@@ -4,12 +4,19 @@ import axios from 'axios';
 import App from './App';
 import {Divider, ListItem, ListItemIcon, ListItemText,
     Toolbar, Typography, Drawer, List, Dialog, DialogContent, DialogTitle, DialogActions,
-     AppBar, Paper, Fab, Tooltip, TextField,
+     AppBar, Paper, Fab, Tooltip, TextField, Snackbar,
      Card, CardContent, Button, Checkbox, ListItemSecondaryAction} from '@material-ui/core/';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import AddIcon from '@material-ui/icons/Add';
 import {withStyle} from './UseStyles';
 
- class AddItem extends React.Component<{listID: any, classes: any}, {listID: string, title: string, open: boolean}>{
+class Alert extends React.Component<any> {
+    render(){
+        return <MuiAlert elevation={6} variant="filled" {...this.props} />;
+    }
+}
+
+class AddItem extends React.Component<{listID: any, classes: any}, {listID: string, title: string, open: boolean, success: boolean, fail: boolean}>{
 
     constructor (props: {listID: any, classes: any}) {
       super(props);
@@ -18,6 +25,8 @@ import {withStyle} from './UseStyles';
         listID: listID,
         title: "",
         open: false,
+        success: false,
+        fail: false,
       }
     }
   
@@ -28,6 +37,7 @@ import {withStyle} from './UseStyles';
       this.setState({open: false});
     };
     
+    
     handleSubmit = () => {
       const newItem = {
         listID: this.state.listID,
@@ -37,11 +47,13 @@ import {withStyle} from './UseStyles';
       .then(res =>{
         console.log(res.data);
         this.handleClose();
+        this.setState({success: true});
       })
       .catch(err => {
         console.log(newItem.listID);
         console.log(err);
-
+        this.handleClose();
+        this.setState({fail: true});
       })
     };
   
@@ -79,6 +91,16 @@ import {withStyle} from './UseStyles';
             </Button>
           </DialogActions>
       </Dialog>
+      <Snackbar open={this.state.success} autoHideDuration={6000} >
+        <Alert severity="success">
+          This is a success message!
+        </Alert>
+      </Snackbar>
+      <Snackbar open={this.state.fail} autoHideDuration={6000} onClose={() => {this.setState({fail:false})} }>
+        <Alert onClose={() => {this.setState({fail:false})}} severity="error">
+          Error! Try again.
+        </Alert>
+      </Snackbar>
     </>
     )
     }
