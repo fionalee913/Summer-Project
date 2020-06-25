@@ -11,9 +11,8 @@ export default class ListContent extends React.Component<{ id: string }>{
       data: [],
     }
   
-    updateListData() {
-      const id = this.props.id;
-      axios.get('/list/' + id)
+    updateListData = () => {
+      axios.get('/list/' + this.props.id)
         .then(res => {
           const data = res.data.items;
           this.setState({ data });
@@ -46,7 +45,7 @@ export default class ListContent extends React.Component<{ id: string }>{
           <ListItems key={item.id} title={item.title} isCompleted={item.isCompleted} id={item.id} listID={item.listID} />
         )}
         </Grid>
-        <AddItem listID={this.props.id}/>
+        <AddItem listID={this.props.id} updateList={this.updateListData}/>
         </main>
       )
     }

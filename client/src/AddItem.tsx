@@ -10,15 +10,9 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import AddIcon from '@material-ui/icons/Add';
 import {withStyle} from './UseStyles';
 
-class Alert extends React.Component<any> {
-    render(){
-        return <MuiAlert elevation={6} variant="filled" {...this.props} />;
-    }
-}
+class AddItem extends React.Component<{listID: any, classes: any, updateList: any}, {listID: string, title: string, open: boolean, success: boolean, fail: boolean, showBar: boolean}>{
 
-class AddItem extends React.Component<{listID: any, classes: any}, {listID: string, title: string, open: boolean, success: boolean, fail: boolean}>{
-
-    constructor (props: {listID: any, classes: any}) {
+    constructor (props: {listID: any, classes: any, updateList: any}) {
       super(props);
       let {listID} = this.props;
       this.state = {
@@ -27,26 +21,30 @@ class AddItem extends React.Component<{listID: any, classes: any}, {listID: stri
         open: false,
         success: false,
         fail: false,
+        showBar: false
       }
     }
-  
+
     handleClickOpen = () => {
       this.setState({open: true});
     };
     handleClose = () => {
       this.setState({open: false});
     };
-    
+    closeBar = () => {
+      this.setState({showBar: false});
+      this.props.updateList();
+    }
     
     handleSubmit = () => {
       const newItem = {
         listID: this.state.listID,
         title: this.state.title,
       };
+      this.setState({success: false, fail: false});
       axios.post('/item/add', newItem)
       .then(res =>{
         console.log(res.data);
-        this.handleClose();
         this.setState({success: true});
       })
       .catch(err => {
@@ -54,6 +52,10 @@ class AddItem extends React.Component<{listID: any, classes: any}, {listID: stri
         console.log(err);
         this.handleClose();
         this.setState({fail: true});
+      })
+      .finally(() => {
+        this.handleClose();
+        this.setState({showBar: true})
       })
     };
   
@@ -91,15 +93,10 @@ class AddItem extends React.Component<{listID: any, classes: any}, {listID: stri
             </Button>
           </DialogActions>
       </Dialog>
-      <Snackbar open={this.state.success} autoHideDuration={6000} >
-        <Alert severity="success">
-          This is a success message!
-        </Alert>
-      </Snackbar>
-      <Snackbar open={this.state.fail} autoHideDuration={6000} onClose={() => {this.setState({fail:false})} }>
-        <Alert onClose={() => {this.setState({fail:false})}} severity="error">
-          Error! Try again.
-        </Alert>
+      <Snackbar open={this.state.showBar} autoHideDuration={3500} onClose={this.closeBar} >
+      <MuiAlert elevation={6} variant="filled" severity={this.state.success ? "success" : "error"} onClose={this.closeBar}>
+      {this.state.success? "This is a success message!": "Error! Try again."}
+      </MuiAlert>
       </Snackbar>
     </>
     )
