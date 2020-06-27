@@ -35,9 +35,6 @@ class App extends React.Component<{classes: any}, {}> {
             <ButtonAppBar />
             <main className={classes.content} />
             <Switch>
-              <Route path="/add">
-                <AddList />
-              </Route>
               <Route path="/list/:id" children={<ShowResponse />}></Route>
               <Route path="/">
                 <Home />
@@ -56,13 +53,7 @@ function ButtonAppBar() {
 
   const drawer = (
     <div>
-      <List>
-        <ListItemLink to="/add" primary="Add List" icon={<AddIcon />} />
-      </List>
-      <Divider />
-      <List>
-        <ShowList />
-      </List>
+      <ShowList />
     </div>
   );
 

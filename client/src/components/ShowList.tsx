@@ -4,14 +4,21 @@ import axios from 'axios';
 import App from '../App';
 import ScaleLoader from "react-spinners/ScaleLoader";
 import ListItemLink from './ListItemLink';
+import {Divider, ListItem, ListItemIcon, ListItemText,
+  Toolbar, Typography, Drawer, List, Dialog, DialogContent, DialogTitle, DialogActions,
+   AppBar, Paper, Fab, Tooltip, TextField,
+   Card, CardContent, Button, Checkbox, ListItemSecondaryAction} from '@material-ui/core/';
+import AddIcon from '@material-ui/icons/Add';
+import AddList from './AddList';
 
 export default class ShowList extends React.Component {
     state = {
       data: [],
       loading: false,
+      dialogOpen: false,
     }
   
-    componentDidMount() {
+    update = () => {
       this.setState({ loading: true }, () => {
         axios.get('/list')
           .then(res => {
@@ -28,7 +35,14 @@ export default class ShowList extends React.Component {
             this.setState({ loading: false })
           )
       })
-  
+    }
+
+    closeDialog = () => {
+      this.setState({dialogOpen: false});
+    }
+
+    async componentDidMount() {
+      await this.update();
     }
   
     render() {
@@ -38,11 +52,25 @@ export default class ShowList extends React.Component {
             color={"#3F51B5"}
             loading={this.state.loading}
           />
+          <AddList dialogOpen={this.state.dialogOpen} update={this.update} closeDialog={this.closeDialog}></AddList>
+          <List>
+            <li>
+              <ListItem button onClick={() => {this.setState({dialogOpen: true})}}>
+              <ListItemIcon>
+                <AddIcon />
+              </ListItemIcon>
+              <ListItemText primary="Add List" />
+              </ListItem>
+            </li>
+          </List>
+          <Divider />
+          <List>
           {
             this.state.data.map((item: { title: string, id: any }) =>
               <ListItemLink key={item.id} to={'/list/' + item.id} primary={item.title} />
             )
           }
+          </List>
         </>
       )
     }

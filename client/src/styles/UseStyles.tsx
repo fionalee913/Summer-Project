@@ -55,7 +55,7 @@ function style(theme: any): Record<any, any> {
       margin: theme.spacing(2),
     },
     absolute: {
-      position: 'absolute',
+      position: 'fixed',
       bottom: theme.spacing(3),
       right: theme.spacing(3),
     },
