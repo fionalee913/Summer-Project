@@ -11,10 +11,11 @@ import ListItemLink from './ListItemLink';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import AddIcon from '@material-ui/icons/Add';
 import { withStyle } from '../styles/UseStyles';
-import { createBrowserHistory } from 'history';
+import { withRouter } from "react-router";
 
+// import history from 'history';
 
-class AddList extends React.Component<{ classes: any, update: any, dialogOpen: any, closeDialog: any }, { title: string, open: boolean, success: boolean, fail: boolean, showBar: boolean, newId: string }>{
+class AddList extends React.Component<{ classes: any, update: any, dialogOpen: any, closeDialog: any}, { title: string, open: boolean, success: boolean, fail: boolean, showBar: boolean, newId: string }>{
   constructor(props: { classes: any, update: any, dialogOpen: any, closeDialog: any }) {
     super(props);
     this.state = {
@@ -27,12 +28,10 @@ class AddList extends React.Component<{ classes: any, update: any, dialogOpen: a
     }
   }
   
-
     closeBar = () => {
-      const history = createBrowserHistory();
       this.setState({ showBar: false });
       this.props.update();
-      history.push(`/list/${this.state.newId}`);
+      this.context.router.history.push(`/list/${this.state.newId}`);
     }
 
     handleClose = () => {
