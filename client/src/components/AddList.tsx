@@ -10,13 +10,14 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 import ListItemLink from './ListItemLink';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import AddIcon from '@material-ui/icons/Add';
-import { withStyle } from '../styles/UseStyles';
-import { withRouter } from "react-router";
+import { withRouter, RouteComponentProps  } from "react-router";
 
-// import history from 'history';
+type PropsType = RouteComponentProps & {
+  update: any, dialogOpen: any, closeDialog: any, history: any
+}
 
-class AddList extends React.Component<{ classes: any, update: any, dialogOpen: any, closeDialog: any}, { title: string, open: boolean, success: boolean, fail: boolean, showBar: boolean, newId: string }>{
-  constructor(props: { classes: any, update: any, dialogOpen: any, closeDialog: any }) {
+class AddList extends React.Component<PropsType, { title: string, open: boolean, success: boolean, fail: boolean, showBar: boolean, newId: string }>{
+  constructor(props: PropsType) {
     super(props);
     this.state = {
       title: "",
@@ -31,7 +32,7 @@ class AddList extends React.Component<{ classes: any, update: any, dialogOpen: a
     closeBar = () => {
       this.setState({ showBar: false });
       this.props.update();
-      this.context.router.history.push(`/list/${this.state.newId}`);
+      this.props.history.push(`/list/${this.state.newId}`);
     }
 
     handleClose = () => {
@@ -96,4 +97,4 @@ class AddList extends React.Component<{ classes: any, update: any, dialogOpen: a
       }
     }
 
-    export default withStyle(AddList);
+    export default withRouter(AddList);

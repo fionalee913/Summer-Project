@@ -48,10 +48,6 @@ export default class ShowList extends React.Component {
     render() {
       return (
         <>
-          <ScaleLoader
-            color={"#3F51B5"}
-            loading={this.state.loading}
-          />
           <AddList dialogOpen={this.state.dialogOpen} update={this.update} closeDialog={this.closeDialog}></AddList>
           <List>
             <li>
@@ -64,6 +60,10 @@ export default class ShowList extends React.Component {
             </li>
           </List>
           <Divider />
+          <ScaleLoader
+            color={"#3F51B5"}
+            loading={this.state.loading}
+          />
           <List>
           {
             this.state.data.map((item: { title: string, id: any }) =>
