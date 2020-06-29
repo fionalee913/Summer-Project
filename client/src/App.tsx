@@ -10,7 +10,7 @@ import { fade, makeStyles, withStyles, Theme, createStyles, unstable_createMuiSt
 import {Divider, ListItem, ListItemIcon, ListItemText,
   Toolbar, Typography, Drawer, List, Dialog, DialogContent, DialogTitle, DialogActions,
    AppBar, Paper, Fab, Tooltip, TextField,
-   Card, CardContent, Button, Checkbox, ListItemSecondaryAction} from '@material-ui/core/'
+   Card, CardContent, Button, IconButton, Checkbox, ListItemSecondaryAction} from '@material-ui/core/'
 import AddIcon from '@material-ui/icons/Add';
 import { Omit } from '@material-ui/types';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -64,9 +64,9 @@ function ButtonAppBar() {
           <Typography variant="h6" className={classes.title} align='left'>
             To-Do List
           </Typography>
-          <Tooltip title="Delete List" aria-label="delete">
+          <IconButton title="Delete List" aria-label="delete" color="inherit">
             <DeleteIcon />
-          </Tooltip>
+          </IconButton>
         </Toolbar>
       </AppBar>
       <nav>

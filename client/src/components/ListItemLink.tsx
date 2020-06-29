@@ -27,7 +27,7 @@ export default function ListItemLink(props: ListItemLinkProps) {
         )),
       [to],
     );
-  
+
     return (
       <li>
         <ListItem button component={renderLink}>
