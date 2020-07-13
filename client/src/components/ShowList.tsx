@@ -9,6 +9,8 @@ import {Divider, ListItem, ListItemIcon, ListItemText,
    AppBar, Paper, Fab, Tooltip, TextField,
    Card, CardContent, Button, Checkbox, ListItemSecondaryAction} from '@material-ui/core/';
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import AddList from './AddList';
 
 export default class ShowList extends React.Component {
@@ -16,6 +18,8 @@ export default class ShowList extends React.Component {
       data: [],
       loading: false,
       dialogOpen: false,
+      deleteList: false,
+      edit: false,
     }
   
     update = () => {
@@ -23,11 +27,7 @@ export default class ShowList extends React.Component {
         axios.get('/list')
           .then(res => {
             console.log(res);
-            const data = res.data;
-            this.setState({ data });
-            res.data.forEach((item: { title: string }) => {
-              console.log(item.title);
-            });
+            this.setState({ data: res.data });
           }).catch(err => {
             console.log(err);
           })
@@ -44,20 +44,23 @@ export default class ShowList extends React.Component {
     async componentDidMount() {
       await this.update();
     }
+
+    handleDone = () => {
+      this.setState({deleteList: false});
+      this.setState({edit: false});
+    }
   
     render() {
       return (
         <>
           <AddList dialogOpen={this.state.dialogOpen} update={this.update} closeDialog={this.closeDialog}></AddList>
           <List>
-            <li>
               <ListItem button onClick={() => {this.setState({dialogOpen: true})}}>
               <ListItemIcon>
                 <AddIcon />
               </ListItemIcon>
               <ListItemText primary="Add List" />
               </ListItem>
-            </li>
           </List>
           <Divider />
           <ScaleLoader
@@ -67,9 +70,16 @@ export default class ShowList extends React.Component {
           <List>
           {
             this.state.data.map((item: { title: string, id: any }) =>
-              <ListItemLink key={item.id} to={'/list/' + item.id} primary={item.title} />
+              <ListItemLink key={item.id} id={item.id} title={item.title} delete={this.state.deleteList} edit={this.state.edit} update={this.update} />
             )
           }
+          <ListItemIcon>
+          <DeleteIcon onClick={() => {this.setState({deleteList: true})}} />
+          </ListItemIcon>
+          <ListItemIcon>
+          <EditIcon onClick={() => {this.setState({edit: true})}}/>
+          </ListItemIcon>
+          {(this.state.deleteList || this.state.edit) ? <Button onClick={this.handleDone}>Done</Button> : null}
           </List>
         </>
       )

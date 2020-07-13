@@ -6,6 +6,7 @@ import App from '../App';
 import AddItem from './AddItem';
 import ListItems from './ListItems';
 import PacmanLoader from "react-spinners/PacmanLoader";
+import { FormGroup } from '@material-ui/core';
 
 export default class ListContent extends React.Component<{ id: string }>{
     state = {
@@ -20,9 +21,6 @@ export default class ListContent extends React.Component<{ id: string }>{
           const data = res.data.items;
           this.setState({ data });
           console.log(data);
-          res.data.items.forEach((item: { title: string }) => {
-              console.log(item.title);
-            });
         })
         .catch(err => {
           console.log(err);
