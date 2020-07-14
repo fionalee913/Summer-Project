@@ -50,7 +50,6 @@ class AddItem extends React.Component<{ listID: any, classes: any, updateList: a
         this.setState({ success: true });
       })
       .catch(err => {
-        console.log(newItem.listID);
         console.log(err);
         this.handleClose();
         this.setState({ fail: true });
@@ -64,25 +63,19 @@ class AddItem extends React.Component<{ listID: any, classes: any, updateList: a
   render() {
     return (
       <>
-        <Tooltip title="Add" aria-label="add" className={this.props.classes.absolute}>
-          <Fab color="primary" onClick={this.handleClickOpen} >
-            <AddIcon />
-          </Fab>
-        </Tooltip>
+        <Fab color="primary" onClick={this.handleClickOpen} aria-label="add" className={this.props.classes.absolute}>
+          <AddIcon />
+        </Fab>
         <Dialog open={this.state.open} onClose={this.handleClose}>
           <DialogContent>
-            <DialogTitle>
-              Add new item
-          </DialogTitle>
+            <DialogTitle>Add new item</DialogTitle>
             <TextField
               autoFocus
               margin="dense"
               label="new item"
               fullWidth
               onChange={(evt) => {
-                console.log(evt.target.value);
-                this.setState({ title: evt.target.value });
-              }}
+                this.setState({ title: evt.target.value }); }}
               value={this.state.title}
             />
           </DialogContent>
@@ -97,7 +90,7 @@ class AddItem extends React.Component<{ listID: any, classes: any, updateList: a
         </Dialog>
         <Snackbar open={this.state.showBar} autoHideDuration={3500} onClose={this.closeBar} >
           <MuiAlert elevation={6} variant="filled" severity={this.state.success ? "success" : "error"} onClose={this.closeBar}>
-            {this.state.success ? "This is a success message!" : "Error! Try again."}
+            {this.state.success ? "Success!" : "Error! Try again."}
           </MuiAlert>
         </Snackbar>
       </>

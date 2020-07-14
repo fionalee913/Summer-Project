@@ -6,7 +6,7 @@ import {Divider, ListItem, ListItemIcon, ListItemText,
      AppBar, Paper, Fab, Tooltip, TextField, Snackbar,
      Card, CardContent, Button, Checkbox, ListItemSecondaryAction} from '@material-ui/core/';
 import App from '../App';
-import ScaleLoader from "react-spinners/ScaleLoader";
+import CircleLoader from "react-spinners/CircleLoader";
 import ListItemLink from './ListItemLink';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import AddIcon from '@material-ui/icons/Add';
@@ -16,16 +16,16 @@ type PropsType = RouteComponentProps & {
   update: any, dialogOpen: any, closeDialog: any, history: any
 }
 
-class AddList extends React.Component<PropsType, { title: string, open: boolean, success: boolean, fail: boolean, showBar: boolean, newId: string }>{
+class AddList extends React.Component<PropsType, { title: string, success: boolean, fail: boolean, showBar: boolean, newId: string, loading: boolean }>{
   constructor(props: PropsType) {
     super(props);
     this.state = {
       title: "",
-      open: true,
       success: false,
       fail: false,
       showBar: false, 
-      newId: ""
+      newId: "",
+      loading: false
     }
   }
   
@@ -43,18 +43,23 @@ class AddList extends React.Component<PropsType, { title: string, open: boolean,
         const newList = {
           title: this.state.title,
         };
-        this.setState({success: false});
+        this.setState({ loading: true }, () => {
+          this.setState({success: false});
         axios.post('/list/add', newList)
         .then(res =>{
           console.log(res.data);
-          this.setState({newId: res.data.id, showBar: true, success: true});
+          this.setState({newId: res.data.id, success: true});
           this.handleClose();
         })
         .catch(err => {
-          console.log(newList.title);
           console.log(err);
-          this.setState({showBar: true});
           this.handleClose();
+        })
+        .finally(() => {
+          this.setState({loading: false});
+          setTimeout(this.handleClose, 5000);
+          setTimeout(()=>this.setState({showBar: true}), 8000);
+        })
         })
       };
     
@@ -65,31 +70,40 @@ class AddList extends React.Component<PropsType, { title: string, open: boolean,
           <DialogContent>
             <DialogTitle>
               Add new list
-          </DialogTitle>
+            </DialogTitle>
             <TextField
               autoFocus
               margin="dense"
               label="new list"
               fullWidth
               onChange={(evt) => {
-                console.log(evt.target.value);
                 this.setState({ title: evt.target.value });
               }}
               value={this.state.title}
             />
           </DialogContent>
           <DialogActions>
+          <CircleLoader
+            color={"#3F51B5"}
+            loading={this.state.loading}
+          />
+          {
+            !this.state.loading && 
             <Button onClick={this.handleSubmit} color="primary">
               Add
             </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
+          }
+          {
+            !this.state.loading &&
+              <Button onClick={this.handleClose} color="primary">
+                Cancel
+              </Button>
+          }
           </DialogActions>
         </Dialog>
         <Snackbar open={this.state.showBar} autoHideDuration={3500} onClose={this.closeBar} >
           <MuiAlert elevation={6} variant="filled" severity={this.state.success ? "success" : "error"} onClose={this.closeBar}>
-            {this.state.success ? "This is a success message!" : "Error! Try again."}
+            {this.state.success ? "Success!" : "Error! Try again."}
           </MuiAlert>
         </Snackbar>
       </>

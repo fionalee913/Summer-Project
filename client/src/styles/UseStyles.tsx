@@ -33,11 +33,10 @@ function style(theme: any): Record<any, any> {
     },
     drawerPaper: {
       width: drawerWidth,
-
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing(2),
+      padding: theme.spacing(3),
     },
     paper: {
       padding: theme.spacing(1),
@@ -59,6 +58,7 @@ function style(theme: any): Record<any, any> {
       bottom: theme.spacing(3),
       right: theme.spacing(3),
     },
+    
   }
 }
 

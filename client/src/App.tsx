@@ -10,7 +10,7 @@ import { fade, makeStyles, withStyles, Theme, createStyles, unstable_createMuiSt
 import {Divider, ListItem, ListItemIcon, ListItemText,
   Toolbar, Typography, Drawer, List, Dialog, DialogContent, DialogTitle, DialogActions,
    AppBar, Paper, Fab, Tooltip, TextField,
-   Card, CardContent, Button, Checkbox, ListItemSecondaryAction} from '@material-ui/core/'
+   Card, CardContent, Button, IconButton, Checkbox, ListItemSecondaryAction} from '@material-ui/core/'
 import AddIcon from '@material-ui/icons/Add';
 import { Omit } from '@material-ui/types';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -26,23 +26,17 @@ import { useStyles, withStyle } from './styles/UseStyles';
 class App extends React.Component<{classes: any}, {}> {
   render() {
     const theme = unstable_createMuiStrictModeTheme();
-    const {classes} = this.props;
     return (
       <div className="App">
-        <header>
         <ThemeProvider theme={theme}>
           <Router>
             <ButtonAppBar />
-            <main className={classes.content} />
             <Switch>
-              <Route path="/list/:id" children={<ShowResponse />}></Route>
-              <Route path="/">
-                <Home />
-              </Route>
+              <Route path="/list/:id" children={<ShowResponse />} />
+              <Route path="/" children={<Home />} />
             </Switch>
           </Router>
           </ThemeProvider>
-        </header>
       </div>
     );
   }
@@ -51,37 +45,25 @@ class App extends React.Component<{classes: any}, {}> {
 function ButtonAppBar() {
   const classes = useStyles();
 
-  const drawer = (
-    <div>
-      <ShowList />
-    </div>
-  );
-
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" className={classes.appBar}>
+      <nav>
+        <Drawer classes={{ paper: classes.drawerPaper, }}
+          variant="permanent"
+          open>
+          <ShowList />
+        </Drawer>
+      </nav>
+      <main className={classes.content} >
+        <div className={classes.toolbar} >
+        <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" className={classes.title} align='left'>
             To-Do List
           </Typography>
-          <Tooltip title="Delete List" aria-label="delete">
-            <DeleteIcon />
-          </Tooltip>
         </Toolbar>
       </AppBar>
-      <nav>
-        <Drawer
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-          variant="permanent"
-          open
-        >
-          {drawer}
-        </Drawer>
-      </nav>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
+      </div>
       </main>
     </div>
   );
@@ -89,7 +71,7 @@ function ButtonAppBar() {
 
 function ShowResponse() {
   let { id } = useParams();
-  axios.get('/list/' + id)
+  axios.get(`/list/${id}`)
     .then(res => {
       console.log(res.data);
     }).catch(err => {
